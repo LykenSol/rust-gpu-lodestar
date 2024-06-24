@@ -1,0 +1,7 @@
+[package]
+name = "shared-alloc"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+spirv-std = "=0.9.0"

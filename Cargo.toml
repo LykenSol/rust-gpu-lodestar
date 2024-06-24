@@ -1,0 +1,22 @@
+[workspace]
+resolver = "2"
+members = [
+    "examples/working",
+    "examples/broken-rc",
+    "examples/broken-vec",
+    "examples/broken-slice",
+]
+
+[package]
+name = "rust-gpu-lodestar-runner"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+futures = { version = "0.3", default-features = false, features = ["std", "executor"] }
+wgpu = { version = "0.20.1", features = ["spirv"] }
+spirv-builder = "=0.9.0"
+
+[patch.crates-io]
+spirv-builder = { git = "https://github.com/LykenSol/rust-gpu", branch = "ephemera/polaris" }
+spirv-std = { git = "https://github.com/LykenSol/rust-gpu", branch = "ephemera/polaris" }
