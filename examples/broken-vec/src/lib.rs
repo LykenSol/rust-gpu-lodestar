@@ -11,8 +11,9 @@ use spirv_std::glam::UVec3;
 use spirv_std::spirv;
 
 #[spirv(compute(threads(128)))]
-pub fn vec_1_u32(#[spirv(global_invocation_id)] id: UVec3) {
+pub fn vec_push_u32(#[spirv(global_invocation_id)] id: UVec3) {
     if id.x % 4 == 0 {
-        let _ = vec![id.x / 4];
+        let mut v = vec![];
+        v.push(id.x);
     }
 }

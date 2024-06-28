@@ -8,24 +8,30 @@ Excerpt from [`examples/working/src/lib.rs`](examples/working/src/lib.rs):
 static ALLOCATOR: ... = ...;
 
 #[spirv(compute(threads(128)))]
-pub fn box_new_u32(#[spirv(global_invocation_id)] id: UVec3) {
-    if id.x % 4 == 0 {
-        let _ = Box::new(id.x / 4);
+pub fn box_or_vec_1_u32(#[spirv(global_invocation_id)] id: UVec3) {
+    match id.x % 8 {
+        0 => {
+            let _ = Box::new(id.x);
+        }
+        1 => {
+            let _ = vec![id.x];
+        }
+        _ => {}
     }
 }
 ```
 ```console
 $ cargo run --release examples/working
 ...
-box_new_u32: allocated 128 bytes in 25.037µs, leaving this heap behind:
-  0000001f 0000001b 00000017 00000013 0000001e 0000001a 00000016 00000012
-  0000001d 00000019 00000015 00000011 0000001c 00000018 00000014 00000010
-  0000000f 0000000b 00000007 00000003 0000000e 0000000a 00000006 00000002
-  0000000d 00000009 00000005 00000001 0000000c 00000008 00000004 00000000
+box_or_vec_1_u32: allocated 128 bytes in 22.666µs, leaving this heap behind:
+  00000039 00000029 00000019 00000009 00000031 00000079 00000069 00000059
+  00000049 00000071 00000061 00000051 00000041 00000021 00000078 00000068
+  00000058 00000048 00000070 00000060 00000050 00000011 00000001 00000040
+  00000038 00000028 00000018 00000008 00000030 00000020 00000010 00000000
 ```
 A few details of note in the above output (i.e. the "heap dump"):
 - it appears reversed because the example `#[global_allocator]` grows downwards
-- all 32 invocations chosen to perform `Box::new` did so successfully
+- all 32 invocations chosen to perform `Box::new`/`vec![...]` did so successfully
 - having 128 invocations in total is used to reveal some interleaving,
   as invocations from different subgroups are (atomically) competing
   (the exact pattern will likely vary between GPUs/drivers/etc.)
