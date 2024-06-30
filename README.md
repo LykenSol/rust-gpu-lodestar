@@ -4,7 +4,7 @@
 
 Excerpt from [`examples/working/src/lib.rs`](examples/working/src/lib.rs):
 ```rust
-#[global_allocator] // (details elided, see original file)
+#[global_allocator] // (see also examples/shared-alloc/lib.rs)
 static ALLOCATOR: ... = ...;
 
 #[spirv(compute(threads(128)))]
