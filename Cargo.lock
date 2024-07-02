@@ -110,14 +110,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0d8c1fef690941d3e7788d328517591fecc684c084084702d6ff1641e993699a"
 
 [[package]]
-name = "broken-rc"
-version = "0.1.0"
-dependencies = [
- "shared-alloc",
- "spirv-std",
-]
-
-[[package]]
 name = "broken-slice"
 version = "0.1.0"
 dependencies = [
@@ -989,7 +981,7 @@ checksum = "08d43f7aa6b08d49f382cde6a7982047c3426db949b1424bc4b7ec9ae12c6ce2"
 [[package]]
 name = "rustc_codegen_spirv"
 version = "0.9.0"
-source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#64b51a812036855f51beeeb00776b6582b750eff"
+source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#96ccd38cb16b462f205783627462b0216bf00059"
 dependencies = [
  "ar",
  "either",
@@ -1016,7 +1008,7 @@ dependencies = [
 [[package]]
 name = "rustc_codegen_spirv-types"
 version = "0.9.0"
-source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#64b51a812036855f51beeeb00776b6582b750eff"
+source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#96ccd38cb16b462f205783627462b0216bf00059"
 dependencies = [
  "rspirv",
  "serde",
@@ -1127,7 +1119,7 @@ dependencies = [
 [[package]]
 name = "spirt"
 version = "0.4.0"
-source = "git+https://github.com/LykenSol/spirt?branch=ephemera/polaris#2d01854af460be82990d8554d6eea81ceeeba2c4"
+source = "git+https://github.com/LykenSol/spirt?branch=ephemera/polaris#e87561eed34dce82342914b40572fb494d7db8bf"
 dependencies = [
  "arrayvec",
  "bytemuck",
@@ -1166,7 +1158,7 @@ dependencies = [
 [[package]]
 name = "spirv-builder"
 version = "0.9.0"
-source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#64b51a812036855f51beeeb00776b6582b750eff"
+source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#96ccd38cb16b462f205783627462b0216bf00059"
 dependencies = [
  "memchr",
  "raw-string",

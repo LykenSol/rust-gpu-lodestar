@@ -8,6 +8,7 @@ static _ALLOCATOR: shared_alloc::BumpAllocViaBufs</*DESCRIPTOR_SET*/ 0> =
 extern crate alloc;
 
 use alloc::boxed::Box;
+use alloc::rc::Rc;
 
 use spirv_std::glam::UVec3;
 use spirv_std::spirv;
@@ -32,9 +33,26 @@ pub fn box_new_u32(#[spirv(global_invocation_id)] id: UVec3) {
     }
 }
 
+// FIXME(eddyb) incorporate into the big example, and `README`.
+#[spirv(compute(threads(128)))]
+pub fn rc_new_u32(#[spirv(global_invocation_id)] id: UVec3) {
+    if id.x % 4 == 0 {
+        let _ = Rc::new(id.x);
+    }
+}
+
 #[spirv(compute(threads(128)))]
 pub fn vec_1_u32(#[spirv(global_invocation_id)] id: UVec3) {
     if id.x % 4 == 0 {
         let _ = vec![id.x];
+    }
+}
+
+// FIXME(eddyb) incorporate into the big example, and `README`.
+#[spirv(compute(threads(128)))]
+pub fn vec_2_u32(#[spirv(global_invocation_id)] id: UVec3) {
+    if id.x % 4 == 0 {
+        let mut v = vec![id.x, id.x];
+        v[(id.x / 4) as usize % 2] |= 0xabcd_0000;
     }
 }
