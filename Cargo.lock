@@ -981,7 +981,7 @@ checksum = "08d43f7aa6b08d49f382cde6a7982047c3426db949b1424bc4b7ec9ae12c6ce2"
 [[package]]
 name = "rustc_codegen_spirv"
 version = "0.9.0"
-source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#96ccd38cb16b462f205783627462b0216bf00059"
+source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#3463f416eeda7bdacd07721839c3a4df5d1b51db"
 dependencies = [
  "ar",
  "either",
@@ -1008,7 +1008,7 @@ dependencies = [
 [[package]]
 name = "rustc_codegen_spirv-types"
 version = "0.9.0"
-source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#96ccd38cb16b462f205783627462b0216bf00059"
+source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#3463f416eeda7bdacd07721839c3a4df5d1b51db"
 dependencies = [
  "rspirv",
  "serde",
@@ -1119,7 +1119,7 @@ dependencies = [
 [[package]]
 name = "spirt"
 version = "0.4.0"
-source = "git+https://github.com/LykenSol/spirt?branch=ephemera/polaris#e87561eed34dce82342914b40572fb494d7db8bf"
+source = "git+https://github.com/LykenSol/spirt?branch=ephemera/polaris#28e9e825f644d4693d2900c4ec20f50dc8231db0"
 dependencies = [
  "arrayvec",
  "bytemuck",
@@ -1158,7 +1158,7 @@ dependencies = [
 [[package]]
 name = "spirv-builder"
 version = "0.9.0"
-source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#96ccd38cb16b462f205783627462b0216bf00059"
+source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#3463f416eeda7bdacd07721839c3a4df5d1b51db"
 dependencies = [
  "memchr",
  "raw-string",
@@ -1171,7 +1171,7 @@ dependencies = [
 [[package]]
 name = "spirv-std"
 version = "0.9.0"
-source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#64b51a812036855f51beeeb00776b6582b750eff"
+source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#3463f416eeda7bdacd07721839c3a4df5d1b51db"
 dependencies = [
  "bitflags 1.3.2",
  "glam",
@@ -1183,7 +1183,7 @@ dependencies = [
 [[package]]
 name = "spirv-std-macros"
 version = "0.9.0"
-source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#64b51a812036855f51beeeb00776b6582b750eff"
+source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#3463f416eeda7bdacd07721839c3a4df5d1b51db"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1194,7 +1194,7 @@ dependencies = [
 [[package]]
 name = "spirv-std-types"
 version = "0.9.0"
-source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#64b51a812036855f51beeeb00776b6582b750eff"
+source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#3463f416eeda7bdacd07721839c3a4df5d1b51db"
 
 [[package]]
 name = "spirv-tools"

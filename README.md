@@ -19,6 +19,16 @@ pub fn box_or_vec_1_u32(#[spirv(global_invocation_id)] id: UVec3) {
         _ => {}
     }
 }
+
+#[spirv(compute(threads(128)))]
+pub fn vec_cap1_push_u32(#[spirv(global_invocation_id)] id: UVec3) {
+    if id.x % 16 == 0 {
+        let mut v = vec![id.x];
+        v.push(id.x | 0x1111_0000);
+    }
+}
+
+// (see examples/working/src/lib.rs for more examples)
 ```
 ```console
 $ cargo run --release examples/working
@@ -28,13 +38,25 @@ box_or_vec_1_u32: allocated 128 bytes in 22.666µs, leaving this heap behind:
   00000049 00000071 00000061 00000051 00000041 00000021 00000078 00000068
   00000058 00000048 00000070 00000060 00000050 00000011 00000001 00000040
   00000038 00000028 00000018 00000008 00000030 00000020 00000010 00000000
+vec_cap1_push_u32: allocated 160 bytes in 196.74µs, leaving this heap behind:
+  00000030 11110030 00000000 00000000 00000020 11110020 00000000 00000000
+  00000010 11110010 00000000 00000000 00000000 11110000 00000000 00000000
+  00000070 11110070 00000000 00000000 00000060 11110060 00000000 00000000
+  00000050 11110050 00000000 00000000 00000040 11110040 00000000 00000000
+  00000070 00000060 00000050 00000040 00000030 00000020 00000010 00000000
 ```
 A few details of note in the above output (i.e. the "heap dump"):
 - it appears reversed because the example `#[global_allocator]` grows downwards
-- all 32 invocations chosen to perform `Box::new`/`vec![...]` did so successfully
+- all 32 invocations of `box_or_vec_1_u32` which were chosen to allocate
+  (4 bytes each, via `Box::new`/`vec![...]`), did so successfully
+  - (`vec_cap1_push_u32` is similar, but has 8 invocations which each allocate 4 bytes for `vec![...]`, then `realloc` to grow the `Vec` to 16 bytes for `.push(...)`)
 - having 128 invocations in total is used to reveal some interleaving,
   as invocations from different subgroups are (atomically) competing
   (the exact pattern will likely vary between GPUs/drivers/etc.)
+
+_(**TODO**: include more of the working examples involving `Rc`, `Vec`, etc.,
+even if the resulting heap dump is not as easy to read,
+but also an upward growth bump allocator might help)_
 
 ### Is it safe?
 

@@ -8,8 +8,22 @@ use core::{mem, ptr};
 use spirv_std::{RuntimeArray, TypedBuffer};
 
 // HACK(eddyb) normally this would be `u8`, but there is a trade-off where
-// using `u8` would require emulating
+// using `u8` would require emulating e.g. `u32` accesses with 4 `u8` ones.
+// FIXME(eddyb) at least for `StorageBuffer` (and `Workgroup` with an extension),
+// SPIR-V allows multiple declarations with the same `DescriptorSet`/`Binding`
+// decorations, to perform type punning, the main caveats being:
+// - `Aliased` decorations are required on all such declarations to not be UB
+//   (but are not fine-grained enough to express disjointness between buffers
+//    coming from different bindings - OTOH Vulkan also allows those to overlap,
+//    so perhaps `Alias` should be the default in Rust-GPU and require opt-out?)
+// - SPIR-T would likely need to stop using "global variables" to model resources,
+//   and instead have special constant forms for "pointer to resource binding"
+//   (though constants aren't the right idea for *resources*, so maybe each
+//    entry-point should have its own argument, or at least special global var,
+//    that acts as e.g. a `Handles` address space base pointer, which arguably
+//    is similar to Metal "argument buffers" or Vulkan "descriptor buffers")
 type HeapUnit = u32;
+const HEAP_UNIT_SIZE: usize = mem::size_of::<HeapUnit>();
 
 pub struct BumpAllocViaBufs<const DESCRIPTOR_SET: u32>;
 
@@ -51,7 +65,6 @@ unsafe impl<const DESCRIPTOR_SET: u32> GlobalAlloc for BumpAllocViaBufs<DESCRIPT
             return ptr::null_mut();
         }
 
-        const HEAP_UNIT_SIZE: usize = mem::size_of::<HeapUnit>();
         let size = (layout.size() + (HEAP_UNIT_SIZE - 1)) / HEAP_UNIT_SIZE;
         let align = (layout.align() + (HEAP_UNIT_SIZE - 1)) / HEAP_UNIT_SIZE;
 
@@ -81,4 +94,32 @@ unsafe impl<const DESCRIPTOR_SET: u32> GlobalAlloc for BumpAllocViaBufs<DESCRIPT
             .cast::<u8>()
     }
     unsafe fn dealloc(&self, _ptr: *mut u8, _layout: Layout) {}
+
+    // HACK(eddyb) explicitly implemented to rely on `HeapUnit` and avoid `memcpy`.
+    unsafe fn realloc(&self, ptr: *mut u8, layout: Layout, new_size: usize) -> *mut u8 {
+        let new_layout = unsafe { Layout::from_size_align_unchecked(new_size, layout.align()) };
+        let new_ptr = unsafe { self.alloc(new_layout) };
+        if !new_ptr.is_null() {
+            unsafe {
+                // HACK(eddyb) copying one `HeapUnit` at a time and not keeping
+                // pointers as "loop state" simplifies analysis/legalization.
+                // NOTE(eddyb) for reference, the `realloc` method defaults to:
+                //   ptr::copy_nonoverlapping(ptr, new_ptr, cmp::min(layout.size(), new_size));
+                let copy_size_in_heap_units = (core::cmp::min(layout.size(), new_size)
+                    + (HEAP_UNIT_SIZE - 1))
+                    / HEAP_UNIT_SIZE;
+                for i in 0..copy_size_in_heap_units {
+                    let dst = new_ptr.cast::<HeapUnit>().add(i);
+                    let src = ptr.cast::<HeapUnit>().add(i);
+                    // HACK(eddyb) `dst.copy_from_nonoverlapping(src, 1)` is the
+                    // normal way to do this, but even that doesn't work for some
+                    // reason (and even if it did, it would do exactly the same
+                    // load+store pair, as sadly there are no "raw bytes" types).
+                    *dst = *src;
+                }
+                self.dealloc(ptr, layout);
+            }
+        }
+        new_ptr
+    }
 }

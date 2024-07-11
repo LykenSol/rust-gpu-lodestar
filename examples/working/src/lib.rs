@@ -56,3 +56,20 @@ pub fn vec_2_u32(#[spirv(global_invocation_id)] id: UVec3) {
         v[(id.x / 4) as usize % 2] |= 0xabcd_0000;
     }
 }
+
+#[spirv(compute(threads(128)))]
+pub fn vec_new_push_u32(#[spirv(global_invocation_id)] id: UVec3) {
+    if id.x % 4 == 0 {
+        let mut v = vec![];
+        v.push(id.x);
+    }
+}
+
+// NOTE(eddyb) this forces `realloc` to trigger with 1 `push` call and 0 loops.
+#[spirv(compute(threads(128)))]
+pub fn vec_cap1_push_u32(#[spirv(global_invocation_id)] id: UVec3) {
+    if id.x % 16 == 0 {
+        let mut v = vec![id.x];
+        v.push(id.x | 0x1111_0000);
+    }
+}
