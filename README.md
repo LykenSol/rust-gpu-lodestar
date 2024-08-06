@@ -100,14 +100,14 @@ on untyped pointers, and only attempting to recover SPIR-V's much stricter
 "typed logical pointers" _after_ legalizing away as much as possible.
 
 As seen in `src/main.rs`, `RUSTGPU_CODEGEN_ARGS` is still required to opt into:
-- `--no-early-report-zombies` to hide overzealous errors that can be legalized away
-- `--no-infer-storage-classes` to skip the overcomplicated whole-program typed
+- ~~`--no-early-report-zombies` to hide overzealous errors that can be legalized away~~
+- ~~`--no-infer-storage-classes` to skip the overcomplicated whole-program typed
   inference engine for SPIR-V address spaces ("storage classes"), in favor of
-  `qptr`'s straight-forward post-legalization deductions
-- `--no-legacy-mem2reg` to skip the less efficient "local variables -> SSA"
-  transformation done on SPIR-V (in favor of its `qptr` replacement)
-- `--spirt-passes=qptr,reduce,fuse_selects` to enable the `qptr` transformations
-  (from/to typed pointers, plus the `mem2reg` replacement), while `reduce`+`fuse_selects`
+  `qptr`'s straight-forward post-legalization deductions~~
+- ~~`--no-legacy-mem2reg` to skip the less efficient "local variables -> SSA"
+  transformation done on SPIR-V (in favor of its `qptr` replacement)~~
+- `--spirt-passes=`~~`qptr,`~~`reduce,fuse_selects` to ~~enable the `qptr` transformations
+  (from/to typed pointers, plus the `mem2reg` replacement), while~~ `reduce`+`fuse_selects`
   help clean up the implementation details of "zero-cost abstractions"
 
 You can see some of those transformations in action in the `.spirt.html` file(s)

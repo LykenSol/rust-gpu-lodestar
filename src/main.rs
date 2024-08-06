@@ -1,12 +1,13 @@
 // FIXME(eddyb) this was meant to be `-Z script` but that's unergonomic.
 // #!/usr/bin/env -S cargo run -Zscript --release --manifest-path
 
+use spirv_builder::ShaderPanicStrategy;
+
 fn main() {
     std::env::set_var(
         "RUSTGPU_CODEGEN_ARGS",
         [
-            "--no-early-report-zombies --no-infer-storage-classes --no-legacy-mem2reg \
-             --spirt-passes=qptr,reduce,fuse_selects",
+            "--spirt-passes=reduce,fuse_selects",
             &std::env::var("RUSTGPU_CODEGEN_ARGS").unwrap_or_default(),
         ]
         .join(" "),
@@ -22,6 +23,10 @@ fn main() {
         let result = spirv_builder::SpirvBuilder::new(path, "spirv-unknown-vulkan1.2")
             .capability(spirv_builder::Capability::Int8)
             .capability(spirv_builder::Capability::VulkanMemoryModelDeviceScopeKHR)
+            .shader_panic_strategy(ShaderPanicStrategy::DebugPrintfThenExit {
+                print_inputs: false,
+                print_backtrace: false,
+            })
             .print_metadata(spirv_builder::MetadataPrintout::None)
             .build();
 
