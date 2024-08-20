@@ -137,12 +137,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b236fc92302c97ed75b38da1f4917b5cdda4984745740f153a5d3059e48d725e"
 
 [[package]]
-name = "byteorder"
-version = "1.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1fd0f2584146f6f2ef48085050886acf353beff7305ebd1ae69500e27c67f64b"
-
-[[package]]
 name = "cc"
 version = "1.0.101"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -402,15 +396,6 @@ dependencies = [
  "pin-project-lite",
  "pin-utils",
  "slab",
-]
-
-[[package]]
-name = "fxhash"
-version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c31b6d751ae2c7f11320402d34e41349dd1016f8d5d45e48c4312bc8625af50c"
-dependencies = [
- "byteorder",
 ]
 
 [[package]]
@@ -757,7 +742,7 @@ dependencies = [
  "num-traits",
  "petgraph",
  "rustc-hash",
- "spirv 0.3.0+sdk-1.3.268.0",
+ "spirv",
  "termcolor",
  "thiserror",
  "unicode-xid",
@@ -903,6 +888,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "20675572f6f24e9e76ef639bc5552774ed45f1c30e2951e1e99c59888861c539"
 
 [[package]]
+name = "recursion"
+version = "0.1.0"
+dependencies = [
+ "spirv-std",
+]
+
+[[package]]
 name = "redox_syscall"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -948,13 +940,12 @@ checksum = "19b30a45b0cd0bcca8037f3d0dc3421eaf95327a17cad11964fb8179b4fc4832"
 
 [[package]]
 name = "rspirv"
-version = "0.11.0+1.5.4"
+version = "0.12.0+sdk-1.3.268.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1503993b59ca9ae4127365c3293517576d7ce56be9f3d8abb1625c85ddc583ba"
+checksum = "69cf3a93856b6e5946537278df0d3075596371b1950ccff012f02b0f7eafec8d"
 dependencies = [
- "fxhash",
- "num-traits",
- "spirv 0.2.0+1.5.4",
+ "rustc-hash",
+ "spirv",
 ]
 
 [[package]]
@@ -981,7 +972,7 @@ checksum = "08d43f7aa6b08d49f382cde6a7982047c3426db949b1424bc4b7ec9ae12c6ce2"
 [[package]]
 name = "rustc_codegen_spirv"
 version = "0.9.0"
-source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#a52c729cb4e55b89e82d92d6824f11506b0cd6f1"
+source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris-plus-rec-call-emu#5432edf5699bffdc6627a14c874431600155e0d8"
 dependencies = [
  "ar",
  "either",
@@ -1006,7 +997,7 @@ dependencies = [
 [[package]]
 name = "rustc_codegen_spirv-types"
 version = "0.9.0"
-source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#a52c729cb4e55b89e82d92d6824f11506b0cd6f1"
+source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris-plus-rec-call-emu#5432edf5699bffdc6627a14c874431600155e0d8"
 dependencies = [
  "rspirv",
  "serde",
@@ -1118,9 +1109,10 @@ dependencies = [
 [[package]]
 name = "spirt"
 version = "0.4.0"
-source = "git+https://github.com/LykenSol/spirt?branch=ephemera/polaris#9c4e19674160c1b92c32f841a81051de8e67e1c9"
+source = "git+https://github.com/LykenSol/spirt?branch=ephemera/polaris-plus-rec-call-emu#4ad24c0eff1706b5ece14d51c581fa1b29338c48"
 dependencies = [
  "arrayvec",
+ "bitflags 2.6.0",
  "bytemuck",
  "derive_more",
  "elsa",
@@ -1137,16 +1129,6 @@ dependencies = [
 
 [[package]]
 name = "spirv"
-version = "0.2.0+1.5.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "246bfa38fe3db3f1dfc8ca5a2cdeb7348c78be2112740cc0ec8ef18b6d94f830"
-dependencies = [
- "bitflags 1.3.2",
- "num-traits",
-]
-
-[[package]]
-name = "spirv"
 version = "0.3.0+sdk-1.3.268.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "eda41003dc44290527a59b13432d4a0379379fa074b70174882adfbdfd917844"
@@ -1157,7 +1139,7 @@ dependencies = [
 [[package]]
 name = "spirv-builder"
 version = "0.9.0"
-source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#a52c729cb4e55b89e82d92d6824f11506b0cd6f1"
+source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris-plus-rec-call-emu#5432edf5699bffdc6627a14c874431600155e0d8"
 dependencies = [
  "memchr",
  "raw-string",
@@ -1170,7 +1152,7 @@ dependencies = [
 [[package]]
 name = "spirv-std"
 version = "0.9.0"
-source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#a52c729cb4e55b89e82d92d6824f11506b0cd6f1"
+source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris-plus-rec-call-emu#5432edf5699bffdc6627a14c874431600155e0d8"
 dependencies = [
  "bitflags 1.3.2",
  "glam",
@@ -1182,7 +1164,7 @@ dependencies = [
 [[package]]
 name = "spirv-std-macros"
 version = "0.9.0"
-source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#a52c729cb4e55b89e82d92d6824f11506b0cd6f1"
+source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris-plus-rec-call-emu#5432edf5699bffdc6627a14c874431600155e0d8"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1193,7 +1175,7 @@ dependencies = [
 [[package]]
 name = "spirv-std-types"
 version = "0.9.0"
-source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris#a52c729cb4e55b89e82d92d6824f11506b0cd6f1"
+source = "git+https://github.com/LykenSol/rust-gpu?branch=ephemera/polaris-plus-rec-call-emu#5432edf5699bffdc6627a14c874431600155e0d8"
 
 [[package]]
 name = "spirv-tools"

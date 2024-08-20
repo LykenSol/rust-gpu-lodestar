@@ -13,6 +13,31 @@ use alloc::rc::Rc;
 use spirv_std::glam::UVec3;
 use spirv_std::spirv;
 
+#[cfg(DISABLED)]
+#[spirv(compute(threads(128)))]
+pub fn btree_set_new_u32(#[spirv(global_invocation_id)] id: UVec3) {
+    if id.x % 4 == 0 {
+        let _ = alloc::collections::BTreeSet::<u32>::new();
+    }
+}
+#[spirv(compute(threads(128)))]
+pub fn btree_map_new_u32_u32(#[spirv(global_invocation_id)] id: UVec3) {
+    if id.x % 4 == 0 {
+        let mut map = alloc::collections::BTreeMap::<u32, u32>::new();
+        map.insert(0, 0);
+        core::mem::forget(map);
+    }
+}
+
+#[cfg(DISABLED)]
+#[spirv(compute(threads(128)))]
+pub fn box_new_box_new_u32(#[spirv(global_invocation_id)] id: UVec3) {
+    if id.x % 4 == 0 {
+        let _ = Box::new(Box::new(id.x));
+    }
+}
+
+#[cfg(DISABLED)]
 #[spirv(compute(threads(128)))]
 pub fn box_or_vec_1_u32(#[spirv(global_invocation_id)] id: UVec3) {
     match id.x % 8 {
@@ -26,6 +51,7 @@ pub fn box_or_vec_1_u32(#[spirv(global_invocation_id)] id: UVec3) {
     }
 }
 
+#[cfg(DISABLED)]
 #[spirv(compute(threads(128)))]
 pub fn box_new_u32(#[spirv(global_invocation_id)] id: UVec3) {
     if id.x % 4 == 0 {
@@ -33,6 +59,7 @@ pub fn box_new_u32(#[spirv(global_invocation_id)] id: UVec3) {
     }
 }
 
+#[cfg(DISABLED)]
 // FIXME(eddyb) incorporate into the big example, and `README`.
 #[spirv(compute(threads(128)))]
 pub fn rc_new_u32(#[spirv(global_invocation_id)] id: UVec3) {
@@ -41,6 +68,7 @@ pub fn rc_new_u32(#[spirv(global_invocation_id)] id: UVec3) {
     }
 }
 
+#[cfg(DISABLED)]
 #[spirv(compute(threads(128)))]
 pub fn vec_1_u32(#[spirv(global_invocation_id)] id: UVec3) {
     if id.x % 4 == 0 {
@@ -48,6 +76,7 @@ pub fn vec_1_u32(#[spirv(global_invocation_id)] id: UVec3) {
     }
 }
 
+#[cfg(DISABLED)]
 // FIXME(eddyb) incorporate into the big example, and `README`.
 #[spirv(compute(threads(128)))]
 pub fn vec_2_u32(#[spirv(global_invocation_id)] id: UVec3) {

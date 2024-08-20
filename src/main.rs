@@ -4,10 +4,21 @@
 use spirv_builder::ShaderPanicStrategy;
 
 fn main() {
+    if false {
+        if std::env::var("VK_LOADER_LAYERS_ENABLE").is_err() {
+            std::env::set_var("VK_LOADER_LAYERS_ENABLE", "VK_LAYER_KHRONOS_validation");
+        }
+        if std::env::var("VK_LAYER_ENABLES").is_err() {
+            std::env::set_var("VK_LAYER_ENABLES", "VK_VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT");
+        }
+        if std::env::var("DEBUG_PRINTF_TO_STDOUT").is_err() {
+            std::env::set_var("DEBUG_PRINTF_TO_STDOUT", "1");
+        }
+    }
     std::env::set_var(
         "RUSTGPU_CODEGEN_ARGS",
         [
-            "--spirt-passes=reduce,fuse_selects",
+            "--spirt-passes=emulate_call_stack,reduce,fuse_selects",
             &std::env::var("RUSTGPU_CODEGEN_ARGS").unwrap_or_default(),
         ]
         .join(" "),
@@ -20,9 +31,9 @@ fn main() {
     }
     let mut any_errors = false;
     for path in args.skip(1) {
-        let result = spirv_builder::SpirvBuilder::new(path, "spirv-unknown-vulkan1.2")
+        let result = spirv_builder::SpirvBuilder::new(path, "spirv-unknown-spv1.5")
             .capability(spirv_builder::Capability::Int8)
-            .capability(spirv_builder::Capability::VulkanMemoryModelDeviceScopeKHR)
+            //.capability(spirv_builder::Capability::VulkanMemoryModelDeviceScopeKHR)
             .shader_panic_strategy(ShaderPanicStrategy::DebugPrintfThenExit {
                 print_inputs: false,
                 print_backtrace: false,
